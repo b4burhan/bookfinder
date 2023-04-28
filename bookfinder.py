@@ -9,26 +9,6 @@ db = client['BookFinder']
 collection = db['Book']
 
 
-# Route to check the connection
-# def check_connection():
-#     data = collection.find_one()
-#     if data:
-#         print ('Connection successful')
-#     else:
-#         print('Connection failed')
-#
-# check_connection()
-
-# API endpoint to retrieve a book by its title and publication date
-@app.route('/books/<string:title>/<string:pub_date>', methods=['GET'])
-def get_book(title, pub_date):
-    book = collection.find_one({'title': title, 'pub_date': pub_date})
-    if book:
-        return jsonify(book)
-    else:
-        return jsonify({'error': 'Book not found'}), 404
-
-
 @app.route('/books', methods=['POST'])
 def add_book():
     # Parse the request data
@@ -61,6 +41,62 @@ def add_book():
         'rating': rating
     }
     return jsonify(response), 201
+
+
+# GET API BY Title
+
+@app.route('/books/<string:title>', methods=['GET'])
+def get_book(title):
+    # Query the database
+    book = collection.find_one({'title': title})
+
+    if book:
+        # Build the response
+        response = {
+            'title': book['title'],
+            'author': book['author'],
+            'genre': book['genre'],
+            'pub_date': book['pub_date'],
+            'rating': book.get('rating', None)
+        }
+        return jsonify(response)
+    else:
+        return jsonify({'error': 'Book not found'}), 404
+
+
+# GET ALL
+@app.route('/books', methods=['GET'])
+def get_books():
+    # Get query parameters
+    title = request.args.get('title')
+    author = request.args.get('author')
+    genre = request.args.get('genre')
+    pub_date = request.args.get('pub_date')
+
+    # Build the query
+    query = {}
+    if title:
+        query['title'] = title
+    if author:
+        query['author'] = author
+    if genre:
+        query['genre'] = genre
+    if pub_date:
+        query['pub_date'] = pub_date
+
+    # Query the database
+    books = []
+    for book in collection.find(query):
+        books.append({
+            'title': book['title'],
+            'author': book['author'],
+            'genre': book['genre'],
+            'pub_date': book['pub_date'],
+            'rating': book.get('rating', None)
+        })
+
+    # Return the results
+    return jsonify({'books': books})
 
 
 if __name__ == '__main__':
