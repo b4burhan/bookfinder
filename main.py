@@ -1,7 +1,7 @@
 import uvicorn as uvicorn
 from fastapi import FastAPI
-from pymongo import MongoClient
 from fastapi.encoders import jsonable_encoder
+from pymongo import MongoClient
 
 app = FastAPI()
 
@@ -55,6 +55,5 @@ async def get_all_books():
     return jsonify({'books': books})
 
 
-
 if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=5000)
+    uvicorn.run(app, port=5000)
