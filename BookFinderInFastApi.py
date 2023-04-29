@@ -2,10 +2,7 @@ import uvicorn as uvicorn
 from fastapi import FastAPI
 from pymongo import MongoClient
 from fastapi.encoders import jsonable_encoder
-from bson.objectid import ObjectId
 from pydantic import BaseModel
-
-# from .main import app
 
 
 app = FastAPI()
