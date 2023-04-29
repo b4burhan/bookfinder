@@ -4,7 +4,6 @@ from pymongo import MongoClient
 from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 
-
 app = FastAPI()
 
 # MongoDB configuration
@@ -49,6 +48,7 @@ def get_book(title: str):
         return jsonable_encoder({'error': 'Book not found'}), 404
 
 
+# Get ALL
 @app.get('/books')
 async def get_all_books():
     books = []
@@ -56,6 +56,16 @@ async def get_all_books():
         books.append(book)
     return jsonable_encoder({'books': books})
 
+
+# Get any related key word
+@app.get('/BooksByKeyWord')
+async def get_books_by_title(title: str):
+    books = []
+    for book in collection.find({'title': {'$regex': f'.*{title}.*', '$options': 'i'}}, {'_id': 0}):
+        # Use $regex to perform a case-insensitive regex search for titles containing the given word
+        books.append(book)
+    return jsonable_encoder({'books': books})
+# ?title=da
 
 if __name__ == '__main__':
     uvicorn.run(app, port=5000)
