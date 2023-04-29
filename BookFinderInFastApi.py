@@ -83,24 +83,6 @@ async def get_books_by_title(field: str, keyword: str):
 
 
 # define the route for deleting a book by id
-# @app.delete("/books/{book_id}")
-# async def delete_book_by_id(book_id: str):
-#     try:
-#         # check if the book with the given id exists
-#         book = collection.find_one({"_id": ObjectId(book_id)})
-#         if book:
-#             # delete the book by its ObjectId
-#             collection.delete_one({"_id": ObjectId(book_id)})
-#             return {"message": "Book deleted successfully"}
-#         else:
-#             # return 404 if book not found
-#             raise HTTPException(status_code=404, detail="Book not found")
-#     except:
-#         # return 500 if there is any server error
-#         raise HTTPException(status_code=500, detail="Server error")
-
-
-# define the route for deleting a book by id
 @app.delete("/books/{book_id}")
 async def delete_book_by_id(book_id: str):
     try:
