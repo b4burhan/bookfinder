@@ -4,9 +4,11 @@ import requests
 from fastapi.testclient import TestClient
 import time
 import threading
-from BookFinderInFastApi import app  # assuming your FastAPI app is defined in a file called main.py
+from BookFinderInFastApi import app
 
-client = TestClient(app)
+import unittest
+
+client = TestClient(app)  # assuming your FastAPI app is defined in a file called main.py
 
 
 # validate that the api return correct HTTP status code (e.g. 200) get request success
@@ -100,8 +102,9 @@ print(f'Total time taken: {total_time} seconds')
 print(f'Requests per second: {num_users * num_requests_per_user / total_time}')
 
 
+# Send a POST request to the API with special characters in the data
+
 def test_special_characters():
-    # Send a POST request to the API with special characters in the data
     headers = {'Content-Type': 'application/json'}
     data = {"title": "Book with special characters!@#$%^&*()", "author": "Author with special characters!@#$%^&*()",
             "genre": "Genre with special characters!@#$%^&*()", "pub_date": "2022", "rating": "5.0"}
@@ -112,3 +115,21 @@ def test_special_characters():
 
     # Ensure the API returns a 200 status code
     assert response.status_code == 200
+
+
+class TestAPI(unittest.TestCase):
+    base_url = 'http://localhost:5000'
+
+    def test_books_get(self):
+        # Test GET method for /books endpoint
+        response = requests.get(f'{self.base_url}/books')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers['Content-Type'], 'application/json')
+        data = json.loads(response.text)
+        self.assertIsInstance(data, dict)
+        self.assertIn('books', data)
+        self.assertIsInstance(data['books'], list)
+
+
+if __name__ == '__main__':
+    unittest.main()
