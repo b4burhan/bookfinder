@@ -32,7 +32,7 @@ Clone the repository to your local machine.
 To run tests, run the following command in root folder
 
 ```bash
-  pytest testing.py
+  pytest test.py
 ```
 
 ## API Endpoints
