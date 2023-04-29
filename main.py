@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import uvicorn as uvicorn
 from fastapi import FastAPI, HTTPException
 from pymongo import MongoClient
@@ -16,9 +18,9 @@ collection = db['Book']
 # API endpoint to insert a new book
 class Book(BaseModel):
     title: str
-    pub_date: str
+    pub_date: datetime
     author: str
-    rating: str
+    rating: int
     genre: str
 
 
