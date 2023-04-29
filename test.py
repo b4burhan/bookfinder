@@ -2,7 +2,7 @@ import pytest
 import json
 from fastapi.testclient import TestClient
 
-from BookFinderInFastApi import app, collection
+from main import app, collection
 from bson.objectid import ObjectId
 
 client = TestClient(app)
