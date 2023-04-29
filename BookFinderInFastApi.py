@@ -2,6 +2,11 @@ import uvicorn as uvicorn
 from fastapi import FastAPI
 from pymongo import MongoClient
 from fastapi.encoders import jsonable_encoder
+from bson.objectid import ObjectId
+from pydantic import BaseModel
+
+# from .main import app
+
 
 app = FastAPI()
 
@@ -12,22 +17,24 @@ collection = db['Book']
 
 
 # API endpoint to insert a new book
+class Book(BaseModel):
+    title: str
+    pub_date: str
+    author: str
+    rating: str
+    genre: str
+
+
 @app.post('/books')
-async def insert_book(title: str, pub_date: str, author: str, rating: str, genre: str):
-    book = {
-        'title': title,
-        'pub_date': pub_date,
-        'author': author,
-        'rating': rating,
-        'genre': genre
-    }
+async def insert_book(book: Book):
+    book = book.dict()
     result = collection.insert_one(book)
     return {'inserted_id': str(result.inserted_id)}
 
 
 # GET API BY Title
-@app.post('//books/<string:title>')
-def get_book(title):
+@app.get('/books/{title}')
+def get_book(title: str):
     # Query the database
     book = collection.find_one({'title': title})
 
@@ -48,13 +55,10 @@ def get_book(title):
 @app.get('/books')
 async def get_all_books():
     books = []
-    for book in collection.find():
+    for book in collection.find({}, {'_id': 0}):  # Exclude _id field from the response
         books.append(book)
-    return jsonable_encoder(books)
-    # Return the results
-    return jsonify({'books': books})
-
+    return jsonable_encoder({'books': books})
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, host='0.0.0.0', port=5000)
+    uvicorn.run(app, port=5000)
