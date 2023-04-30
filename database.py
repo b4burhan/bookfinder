@@ -44,3 +44,18 @@ def delete_student(id: str):
     if book:
         collection.delete_one({"_id": ObjectId(id)})
         return True
+
+
+# Update a student with a matching ID
+def update_book(id: str, data: dict):
+    # Return false if an empty request body is sent.
+    if len(data) < 1:
+        return False
+    book =  collection.find_one({"_id": ObjectId(id)})
+    if book:
+        updated_book =  collection.update_one(
+            {"_id": ObjectId(id)}, {"$set": data}
+        )
+        if updated_book:
+            return True
+        return False
