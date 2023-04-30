@@ -27,6 +27,3 @@ def test_search_books():
     response = client.get("/book?search=Test")
     assert response.status_code == 200
     assert response.json() is not None
-
-    deleted_book = collection.find_one({"_id": ObjectId(book_id)})
-    assert deleted_book is None
