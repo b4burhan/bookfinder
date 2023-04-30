@@ -22,6 +22,12 @@ def test_get_all_books():
     assert response.status_code == 200
     assert response.json() is not None
 
+
+def test_search_books():
+    response = client.get("/book?search=Test")
+    assert response.status_code == 200
+    assert response.json() is not None
+
 # def test_delete_book_by_id():
 #     # create a book to delete
 #     book = {"title": "Test Book", "author": "John Doe"}
