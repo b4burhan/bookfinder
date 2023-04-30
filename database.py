@@ -33,16 +33,14 @@ def retrieve_books(search):
     return books
 
 
-# Retrieve a student with a matching ID
 def retrieve_book_id(id: str) -> dict:
     book = collection.find_one({"_id": ObjectId(id)})
     if book:
         return book_helper(book)
 
 
-# Delete a student from the database
-async def delete_student(id: str):
-    book = await collection.find_one({"_id": ObjectId(id)})
+def delete_student(id: str):
+    book = collection.find_one({"_id": ObjectId(id)})
     if book:
-        await collection.delete_one({"_id": ObjectId(id)})
+        collection.delete_one({"_id": ObjectId(id)})
         return True

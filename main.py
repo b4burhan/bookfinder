@@ -31,7 +31,7 @@ async def get_student_data(id):
 
 @app.delete("/book/{id}")
 async def delete_student_data(id: str):
-    deleted_student = await delete_student(id)
+    deleted_student = delete_student(id)
     if deleted_student:
         return {"message": "Book deleted successfully"}
     return {"An error occurred", 404, "Student with id {0} doesn't exist".format(id)}
