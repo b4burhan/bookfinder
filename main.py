@@ -1,8 +1,9 @@
+from typing import Optional
 import uvicorn as uvicorn
 from fastapi import FastAPI, Body
 from fastapi.encoders import jsonable_encoder
 
-from database import add_book
+from database import add_book, retrieve_books, retrieve_book_id, delete_student
 from models import BookSchema
 
 app = FastAPI()
@@ -15,63 +16,25 @@ async def create(book: BookSchema = Body(...)):
     return new_book
 
 
-# Retrieve a student with a matching ID to delete
-@app.delete("/book/{_id}")
-async def remove(_id: str):
-    book = collection.find_one({"_id": ObjectId(_id)})
-    if book:
-        collection.delete_one({"_id": ObjectId(_id)})
-        return {"message": "Book deleted successfully"}
-    else:
-        raise HTTPException(status_code=404, detail="Book not found")
-
-
-@app.get('/books')
-async def get_all_books():
-    books = []
-    for book in collection.find({}, {'_id': 0}):  # Exclude _id field from the response
-        books.append(book)
-    return jsonable_encoder({'books': books})
-
-
-
-#
-# @app.put('/books/{book_id}')
-# async def update_book(book_id: str, book: Book):
-#     book_dict = jsonable_encoder(book)
-#     result = collection.update_one({'_id': ObjectId(book_id)}, {'$set': book_dict})
-#     if result.modified_count == 0:
-#         # If no book was updated, raise an HTTPException with a 404 status code
-#         raise HTTPException(status_code=404, detail='Book not found')
-#     else:
-#         # If a book was updated, return a success message with the updated book
-#         updated_book = collection.find_one({'_id': ObjectId(book_id)}, {'_id': 0})
-#         return jsonable_encoder({'message': 'Book updated successfully', 'book': updated_book})
-#
-#
 @app.get('/book')
 async def get_books(search: Optional[str] = None):
     books = retrieve_books(search)
     return books
 
 
-#
-#
-# @app.delete("/books/{book_id}")
-# async def delete_book_by_id(book_id: str):
-#     try:
-#         # check if the book with the given id exists
-#         book = collection.find_one({"_id": ObjectId(book_id)})
-#         if book:
-#             # delete the book by its ObjectId
-#             collection.delete_one({"_id": ObjectId(book_id)})
-#             return {"message": "Book deleted successfully"}
-#         else:
-#             # return 404 if book not found
-#             raise HTTPException(status_code=404, detail="Book not found")
-#     except:
-#         # return 500 if there is any server error
-#         raise HTTPException(status_code=500, detail="Server error")
+@app.get("/book/{id}")
+async def get_student_data(id):
+    student = retrieve_book_id(id)
+    if student:
+        return student
+
+
+@app.delete("/book/{id}")
+async def delete_student_data(id: str):
+    deleted_student = await delete_student(id)
+    if deleted_student:
+        return {"message": "Book deleted successfully"}
+    return {"An error occurred", 404, "Student with id {0} doesn't exist".format(id)}
 
 
 if __name__ == '__main__':

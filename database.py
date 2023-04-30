@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+from bson import ObjectId
 
 client = MongoClient('mongodb://localhost:27017/')
 db = client['BookFinder']
@@ -30,3 +31,18 @@ def retrieve_books(search):
         books.append(book_helper(book))
 
     return books
+
+
+# Retrieve a student with a matching ID
+def retrieve_book_id(id: str) -> dict:
+    book = collection.find_one({"_id": ObjectId(id)})
+    if book:
+        return book_helper(book)
+
+
+# Delete a student from the database
+async def delete_student(id: str):
+    book = await collection.find_one({"_id": ObjectId(id)})
+    if book:
+        await collection.delete_one({"_id": ObjectId(id)})
+        return True
