@@ -33,5 +33,5 @@ To run tests, run the following command in root folder
 You can access Openapi Specification 3 [Here.](http://127.0.0.1:1000/docs#/default)
 
 # Postman Collection
-You can access Openapi Specification 3 [Here.](http://127.0.0.1:1000/docs#/default)
+You can access Postman Collection [Here.](https://documenter.getpostman.com/view/27175277/2s93eSZvCP)
 
