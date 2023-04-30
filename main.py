@@ -4,7 +4,7 @@ import uvicorn as uvicorn
 from fastapi import FastAPI, Body
 from fastapi.encoders import jsonable_encoder
 
-from database import add_book, retrieve_books, retrieve_book_id, delete_student, update_book
+from database import add_book, retrieve_books, retrieve_book_id, delete_book, update_book
 from models import BookSchema, ResponseModel, ErrorResponseModel, UpdateBookModel
 
 app = FastAPI()
@@ -38,7 +38,7 @@ async def get_student_data(id):
 
 @app.delete("/book/{id}")
 async def delete_student_data(id: str):
-    deleted_student = delete_student(id)
+    deleted_student = delete_book(id)
     if deleted_student:
         return HTTPException(status_code=200, detail="Book deleted successfully")
     else:
@@ -50,10 +50,7 @@ def update_student_data(id: str, req: UpdateBookModel = Body(...)):
     req = {k: v for k, v in req.dict().items() if v is not None}
     updated_book = update_book(id, req)
     if updated_book:
-        return ResponseModel(
-            "Student with ID: {} name update is successful".format(id),
-            "Student name updated successfully",
-        )
+        return updated_book
     return ErrorResponseModel(
         "An error occurred",
         404,
@@ -62,4 +59,4 @@ def update_student_data(id: str, req: UpdateBookModel = Body(...)):
 
 
 if __name__ == '__main__':
-    uvicorn.run(app, port=6000)
+    uvicorn.run(app, port=1000)

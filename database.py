@@ -1,4 +1,4 @@
-from pymongo import MongoClient
+from pymongo import MongoClient, ReturnDocument
 from bson import ObjectId
 
 client = MongoClient('mongodb://localhost:27017/')
@@ -40,22 +40,11 @@ def retrieve_book_id(id: str) -> dict:
 
 
 def delete_book(id: str):
-    book = collection.find_one({"_id": ObjectId(id)})
-    if book:
-        collection.delete_one({"_id": ObjectId(id)})
-        return True
+    collection.delete_one({"_id": ObjectId(id)})
+    return True
 
 
-# Update a student with a matching ID
 def update_book(id: str, data: dict):
-    # Return false if an empty request body is sent.
-    if len(data) < 1:
-        return False
-    book =  collection.find_one({"_id": ObjectId(id)})
-    if book:
-        updated_book =  collection.update_one(
-            {"_id": ObjectId(id)}, {"$set": data}
-        )
-        if updated_book:
-            return True
-        return False
+    updated_book = collection.find_one_and_update({"_id": ObjectId(id)}, {"$set": data},
+                                                  return_document=ReturnDocument.AFTER)
+    return book_helper(updated_book)
