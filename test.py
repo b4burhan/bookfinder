@@ -16,13 +16,12 @@ def test_create_book():
     response = client.post("/book", json=book_data)
     assert response.status_code == 200
 
-#
-# def test_get_all_books():
-#     response = client.get("/books")
-#     assert response.status_code == 200
-#     assert response.json().get("books") is not None
-#
-#
+
+def test_get_all_books():
+    response = client.get("/book")
+    assert response.status_code == 200
+    assert response.json() is not None
+
 # def test_delete_book_by_id():
 #     # create a book to delete
 #     book = {"title": "Test Book", "author": "John Doe"}

@@ -20,3 +20,10 @@ def add_book(book_data: dict) -> dict:
     book = collection.insert_one(book_data)
     new_book = collection.find_one({"_id": book.inserted_id})
     return book_helper(new_book)
+
+
+def retrieve_books():
+    books = []
+    for student in collection.find():
+        books.append(book_helper(student))
+    return books

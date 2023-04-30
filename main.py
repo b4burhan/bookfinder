@@ -2,7 +2,7 @@ import uvicorn as uvicorn
 from fastapi import FastAPI, Body
 from fastapi.encoders import jsonable_encoder
 
-from database import add_book
+from database import add_book, retrieve_books
 from models import BookSchema
 
 app = FastAPI()
@@ -29,15 +29,12 @@ async def create(book: BookSchema = Body(...)):
 #         return jsonable_encoder({'message': 'Book updated successfully', 'book': updated_book})
 #
 #
-# # Get ALL Book
-# @app.get('/books')
-# async def get_all_books():
-#     books = []
-#     for book in collection.find({}, {'_id': 0}):  # Exclude _id field from the response
-#         books.append(book)
-#     return jsonable_encoder({'books': books})
-#
-#
+@app.get('/book')
+async def get_books():
+    books = retrieve_books()
+    return books
+
+
 # # Get data by field and keyword
 # @app.get('/BooksByKeyWord')
 # async def get_books_by_title(field: str, keyword: str):
