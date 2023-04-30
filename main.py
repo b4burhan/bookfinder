@@ -1,9 +1,10 @@
 from typing import Optional
 import uvicorn as uvicorn
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, Body, HTTPException
 from fastapi.encoders import jsonable_encoder
+from starlette import status
 
-from database import add_book, retrieve_books, retrieve_book_id, delete_student
+from database import add_book, retrieve_books, retrieve_book_id, delete_book
 from models import BookSchema
 
 app = FastAPI()
@@ -23,18 +24,19 @@ async def get_books(search: Optional[str] = None):
 
 
 @app.get("/book/{id}")
-async def get_student_data(id):
-    student = retrieve_book_id(id)
-    if student:
-        return student
+async def get_book_data(id):
+    book = retrieve_book_id(id)
+    if book:
+        return book
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Resource not found')
 
 
 @app.delete("/book/{id}")
-async def delete_student_data(id: str):
-    deleted_student = delete_student(id)
-    if deleted_student:
+async def delete_book_data(id: str):
+    deleted_book = delete_book(id)
+    if deleted_book:
         return {"message": "Book deleted successfully"}
-    return {"An error occurred", 404, "Student with id {0} doesn't exist".format(id)}
+    raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'Resource not found')
 
 
 if __name__ == '__main__':

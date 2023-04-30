@@ -39,7 +39,7 @@ def retrieve_book_id(id: str) -> dict:
         return book_helper(book)
 
 
-def delete_student(id: str):
+def delete_book(id: str):
     book = collection.find_one({"_id": ObjectId(id)})
     if book:
         collection.delete_one({"_id": ObjectId(id)})
