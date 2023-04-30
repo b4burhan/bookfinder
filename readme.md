@@ -25,26 +25,13 @@ Run development server.
 ## Running Tests
 To run tests, run the following command in root folder
 ```bash
-  pytest test.py
+  pytest tests.py
 ```
 
-## API Endpoints
+## API Documentation
 
-The following endpoints are available:
+You can access Openapi Specification 3 [Here.](http://127.0.0.1:1000/docs#/default)
 
-GET /books
-Returns a list of all books in the database.
-
-GET /books/{title}
-Returns details for a book with a specific title.
-
-POST /books
-Adds a new book to the database.
-
-Example Request/Response
-
-
-
-# Contributors
-This project was created by [Your Name]. Contributions are welcome - please submit a pull request if you would like to make changes.
+# Postman Collection
+You can access Openapi Specification 3 [Here.](http://127.0.0.1:1000/docs#/default)
 
