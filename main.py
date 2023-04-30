@@ -1,3 +1,5 @@
+from typing import Optional
+
 import uvicorn as uvicorn
 from fastapi import FastAPI, Body
 from fastapi.encoders import jsonable_encoder
@@ -30,35 +32,11 @@ async def create(book: BookSchema = Body(...)):
 #
 #
 @app.get('/book')
-async def get_books():
-    books = retrieve_books()
+async def get_books(search: Optional[str] = None):
+    books = retrieve_books(search)
     return books
 
 
-# # Get data by field and keyword
-# @app.get('/BooksByKeyWord')
-# async def get_books_by_title(field: str, keyword: str):
-#     # Define a dictionary to map query parameters to MongoDB field names
-#     field_mapping = {'title': 'title', 'pub_date': 'pub_date', 'author': 'author', 'rating': 'rating', 'genre': 'genre'}
-#
-#     # Check if the provided field is valid
-#     if field not in field_mapping:
-#         return {'error': f'Invalid field "{field}". Valid fields are {", ".join(field_mapping.keys())}'}
-#
-#     # Define the query to find documents containing the given keyword in the specified field
-#     query = {field_mapping[field]: {'$regex': f'.*{keyword}.*', '$options': 'i'}}
-#
-#     # Use MongoDB's projection feature to retrieve only the required fields
-#     projection = {field_mapping[f]: 1 for f in field_mapping}
-#     projection['_id'] = 0
-#
-#     # Find the matching documents in the database
-#     cursor = collection.find(query, projection)
-#
-#     # Convert the MongoDB documents to dictionaries
-#     books = [{f: doc[f] for f in field_mapping} for doc in cursor]
-#
-#     return {'books': books}
 #
 #
 # @app.delete("/books/{book_id}")

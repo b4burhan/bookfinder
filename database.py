@@ -22,8 +22,11 @@ def add_book(book_data: dict) -> dict:
     return book_helper(new_book)
 
 
-def retrieve_books():
+def retrieve_books(search):
     books = []
-    for student in collection.find():
-        books.append(book_helper(student))
+    filter = {'$or': [{'title': {'$regex': search}}, {'author': {'$regex': search}}, {'genre': {'$regex': search}}]}
+    queryset = collection.find(filter) if search else collection.find()
+    for book in queryset:
+        books.append(book_helper(book))
+
     return books
