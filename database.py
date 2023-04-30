@@ -1,8 +1,8 @@
 from pymongo import MongoClient
 
 client = MongoClient('mongodb://localhost:27017/')
-db = client['bookstore']
-collection = db['book']
+db = client['BookFinder']
+collection = db['Book']
 
 
 def book_helper(book) -> dict:
